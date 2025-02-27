@@ -1,0 +1,20 @@
+$DNSZone = "reprobadosperocon6.com.mx"
+$ReverseZone = "100.168.192.in-addr.arpa"
+$ServerIP = "192.168.100.71"
+
+Install-WindowsFeature -Name DNS -IncludeManagementTools
+Set-Service -Name DNS -StartupType Automatic
+Start-Service DNS
+
+Remove-DnsServerZone -Name $DNSZone -Confirm:$false -ErrorAction SilentlyContinue
+Remove-DnsServerZone -Name $ReverseZone -Confirm:$false -ErrorAction SilentlyContinue
+
+Add-DnsServerPrimaryZone -Name $DNSZone -ZoneFile "$DNSZone.dns" -DynamicUpdate Secure
+Add-DnsServerResourceRecordA -ZoneName $DNSZone -Name "ns" -IPv4Address $ServerIP
+Add-DnsServerResourceRecordA -ZoneName $DNSZone -Name "www" -IPv4Address $ServerIP
+Add-DnsServerResourceRecordNS -ZoneName $DNSZone -Name "@" -NameServer "ns.$DNSZone"
+
+Add-DnsServerPrimaryZone -NetworkId "192.168.100.0/24" -ReplicationScope "Forest"
+Add-DnsServerResourceRecordPTR -Name "71" -ZoneName $ReverseZone -PtrDomainName "ns.$DNSZone"
+
+Restart-Service DNS

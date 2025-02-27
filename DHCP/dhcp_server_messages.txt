@@ -1,0 +1,10 @@
+Mensajes del Servidor DHCP:
+
+- Instalación del servidor DHCP completada.
+- Configuración aplicada en /etc/dhcp/dhcpd.conf (Ubuntu).
+- Para verificar el estado del servicio:
+  - Ubuntu: sudo systemctl status isc-dhcp-server
+  - Windows: Get-DhcpServerv4Scope
+- Para reiniciar el servicio:
+  - Ubuntu: sudo systemctl restart isc-dhcp-server
+  - Windows: Restart-Service DHCPServer

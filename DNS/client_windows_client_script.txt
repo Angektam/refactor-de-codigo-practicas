@@ -1,0 +1,4 @@
+$ServerIP = Read-Host "Ingrese la IP del Servidor DNS en Ubuntu"
+Set-DnsClientServerAddress -InterfaceIndex (Get-NetAdapter | Select-Object -First 1).InterfaceIndex -ServerAddresses $ServerIP
+Resolve-DnsName "www.reprobadosperocon6.com.mx"
+Resolve-DnsName "192.168.100.71" -Type PTR

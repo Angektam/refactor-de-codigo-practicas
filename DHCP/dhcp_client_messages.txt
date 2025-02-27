@@ -1,0 +1,9 @@
+Mensajes del Cliente DHCP:
+
+- Configuración de cliente DHCP completada.
+- Para verificar la dirección IP asignada:
+  - Ubuntu: ip a | grep inet
+  - Windows: ipconfig /all
+- Para renovar la dirección IP:
+  - Ubuntu: sudo dhclient -r && sudo dhclient
+  - Windows: ipconfig /renew

@@ -1,0 +1,5 @@
+#!/bin/bash
+read -p "Ingrese la IP del Servidor DNS en Windows: " SERVER_IP
+echo "nameserver $SERVER_IP" | sudo tee /etc/resolv.conf > /dev/null
+nslookup www.reprobadosperocon6.com.mx $SERVER_IP
+nslookup 192.168.100.71 $SERVER_IP

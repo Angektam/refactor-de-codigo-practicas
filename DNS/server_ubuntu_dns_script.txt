@@ -1,0 +1,49 @@
+#!/bin/bash
+
+sudo apt update && sudo apt install -y bind9
+
+sudo rm -f /etc/bind/named.conf.local
+sudo rm -f /var/lib/bind/reprobadosperocon6.zone
+sudo rm -f /var/lib/bind/192.168.100.zone
+
+cat <<EOF | sudo tee /etc/bind/named.conf.local
+zone "reprobadosperocon6.com.mx" {
+    type master;
+    file "/var/lib/bind/reprobadosperocon6.zone";
+};
+
+zone "100.168.192.in-addr.arpa" {
+    type master;
+    file "/var/lib/bind/192.168.100.zone";
+};
+EOF
+
+cat <<EOF | sudo tee /var/lib/bind/reprobadosperocon6.zone
+$TTL 604800
+@   IN  SOA reprobadosperocon6.com.mx. admin.reprobadosperocon6.com.mx. (
+         3        ; Serial
+         604800   ; Refresh
+         86400    ; Retry
+         2419200  ; Expire
+         604800 ) ; Negative Cache TTL
+
+@   IN  NS  ns.reprobadosperocon6.com.mx.
+ns  IN  A   192.168.100.71
+www IN  A   192.168.100.71
+EOF
+
+cat <<EOF | sudo tee /var/lib/bind/192.168.100.zone
+$TTL 604800
+@   IN  SOA reprobadosperocon6.com.mx. admin.reprobadosperocon6.com.mx. (
+         3        ; Serial
+         604800   ; Refresh
+         86400    ; Retry
+         2419200  ; Expire
+         604800 ) ; Negative Cache TTL
+
+@   IN  NS  ns.reprobadosperocon6.com.mx.
+71  IN  PTR ns.reprobadosperocon6.com.mx.
+EOF
+
+sudo systemctl restart bind9
+sudo systemctl enable bind9
